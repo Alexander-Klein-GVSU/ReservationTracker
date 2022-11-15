@@ -11,4 +11,7 @@
     <string name="name">name</string>
     <string name="estimated_time">estimated time</string>
     <string name="table_size">table size</string>
+    <string name="are_you_a_restaurant">Are you a restaurant?</string>
+    <string name="user">User</string>
+    <string name="restaurant">Restaurant</string>
 </resources>
