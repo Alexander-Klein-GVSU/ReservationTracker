@@ -43,6 +43,8 @@ class MainActivity : AppCompatActivity() {
                         /*
                         Load table view
                          */
+                        val i = Intent(this, displayReservations::class.java)
+                        startActivity(i)
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.exception)

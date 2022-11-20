@@ -44,7 +44,7 @@ class Signup : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (password == passConf) {
+            else if (password == passConf) {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
