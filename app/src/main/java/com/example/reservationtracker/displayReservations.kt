@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class DisplayReservations : AppCompatActivity() {
+class displayReservations : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
@@ -21,7 +21,7 @@ class DisplayReservations : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_reservations)
 
-        val docRef = auth.currentUser?.let { db.collection("Restaurant").document(it.uid).collection("Reservations") }
+        /*val docRef = auth.currentUser?.let { db.collection("Restaurant").document(it.uid).collection("Reservations") }
         docRef?.get()?.addOnSuccessListener {
             val reservations = ArrayList<Reservation>()
             for (item in it.documents) {
@@ -32,6 +32,6 @@ class DisplayReservations : AppCompatActivity() {
                 reservation.sizeVal = item.data!!["sizeVal"] as String
                 reservations.add(reservation)
             }
-        }
+        }*/
     }
 }
