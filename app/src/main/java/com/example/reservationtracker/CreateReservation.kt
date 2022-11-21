@@ -1,20 +1,22 @@
 package com.example.reservationtracker
 
-import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 
 class CreateReservation : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    data class Reservation(
+        val email: String? = null,
+        val name: String? = null,
+        val timeVal: String? = null,
+        val sizeVal: String? = null
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,23 +39,13 @@ class CreateReservation : AppCompatActivity() {
             if (email == "" || name == "" || timeVal == "" || sizeVal == "") {
                 if (auth.fetchSignInMethodsForEmail(email).isComplete) {
                     // Create a new reservation entry
-                    val user = hashMapOf(
-                        "email" to email,
-                        "name" to name,
-                        "time" to timeVal,
-                        "size" to sizeVal
-                    )
+                    val reservation = Reservation(email, name, timeVal, sizeVal)
 
                     // Add a new document with a generated ID
-                    /*****needs to be added to a specific doc ******/
-                    db.collection("Restaurant")
-                        .add(user)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
+                    auth.currentUser?.let { it1 ->
+                        db.collection("Restaurant").document(it1.uid)
+                            .collection("Reservations").add(reservation)
+                    }
                     return@setOnClickListener
                 }
             }

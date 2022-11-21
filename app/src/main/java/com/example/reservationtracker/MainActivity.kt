@@ -39,11 +39,10 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success")
-                        val user = auth.currentUser
                         /*
                         Load table view
                          */
-                        val i = Intent(this, displayReservations::class.java)
+                        val i = Intent(this, DisplayReservations::class.java)
                         startActivity(i)
                     } else {
                         // If sign in fails, display a message to the user.

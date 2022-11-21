@@ -53,34 +53,26 @@ class Signup : AppCompatActivity() {
                             val currentUser = auth.currentUser
                             if (isRestaurant) {
                                 //Add data point with restaurant and email
-                                // Create a new user with a first and last name
+                                // Create a new user
                                 val user = hashMapOf(
                                     "email" to email,
                                 )
 
                                 // Add a new document with a generated ID
-                                db.collection("Restaurant")
-                                    .add(user)
-                                    .addOnSuccessListener { documentReference ->
-                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error adding document", e)
-                                    }
+                                auth.currentUser?.let { it1 ->
+                                    db.collection("Restaurant").document(it1.uid )
+                                        .set(user)
+                                }
                             } else {
                                 val user = hashMapOf(
                                     "email" to email,
                                 )
 
                                 // Add a new document with a generated ID
-                                db.collection("Customer")
-                                    .add(user)
-                                    .addOnSuccessListener { documentReference ->
-                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error adding document", e)
-                                    }
+                                auth.currentUser?.let { it1 ->
+                                    db.collection("Customer").document(it1.uid)
+                                        .set(user)
+                                }
                             }
                             this.finish()
                         } else {
