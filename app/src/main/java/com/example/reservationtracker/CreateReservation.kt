@@ -38,14 +38,15 @@ class CreateReservation : AppCompatActivity() {
                 if (auth.fetchSignInMethodsForEmail(email).isComplete) {
                     // Create a new reservation entry
                     val user = hashMapOf(
-                        "email" to "" + emailText,
-                        "name" to "" + nameText,
-                        "time" to "" + timeEstText,
-                        "size" to sizeText
+                        "email" to email,
+                        "name" to name,
+                        "time" to timeVal,
+                        "size" to sizeVal
                     )
 
-// Add a new document with a generated ID
-                    db.collection("users")
+                    // Add a new document with a generated ID
+                    /*****needs to be added to a specific doc ******/
+                    db.collection("Restaurant")
                         .add(user)
                         .addOnSuccessListener { documentReference ->
                             Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
