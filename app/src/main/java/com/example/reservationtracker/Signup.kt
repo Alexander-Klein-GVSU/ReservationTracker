@@ -14,11 +14,14 @@ import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class Signup : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    val db = Firebase.firestore
+
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +56,26 @@ class Signup : AppCompatActivity() {
                             val user = auth.currentUser
                             if (isRestaurant) {
                                 //Add data point with restaurant and email
+                                db.collection("Restaurant")
+                                    .add(auth.currentUser.toString())
+                                    .addOnSuccessListener { documentReference ->
+                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(TAG, "Error adding document", e)
+                                    }
                             } else {
                                 //Add data point with user and email
+
+                                // Add a new document with a generated ID
+                                db.collection("customer")
+                                    .add(auth.currentUser.toString())
+                                    .addOnSuccessListener { documentReference ->
+                                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(TAG, "Error adding document", e)
+                                    }
                             }
                             this.finish()
                         } else {
