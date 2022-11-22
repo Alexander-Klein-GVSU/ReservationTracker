@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -25,6 +26,8 @@ class displayReservations : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_reservations)
 
+        auth = Firebase.auth
+
         val reserveBtn = findViewById<FloatingActionButton>(R.id.restaurantAddRes)
         val resRcyclr = findViewById<RecyclerView>(R.id.restaurantRecycler)
 
@@ -33,7 +36,7 @@ class displayReservations : AppCompatActivity() {
             startActivity(i)
         }
 
-        /*val docRef = auth.currentUser?.let { db.collection("Restaurant").document(it.uid).collection("Reservations") }
+        val docRef = auth.currentUser?.let { db.collection("Customer").document(it.uid).collection("Reservation") }
         docRef?.get()?.addOnSuccessListener {
             val reservations = ArrayList<Reservation>()
             for (item in it.documents) {
@@ -44,6 +47,6 @@ class displayReservations : AppCompatActivity() {
                 reservation.sizeVal = item.data!!["sizeVal"] as String
                 reservations.add(reservation)
             }
-        }*/
+        }
     }
 }

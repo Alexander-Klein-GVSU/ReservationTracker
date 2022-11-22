@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.ktx.firestore
 
@@ -22,6 +23,7 @@ class CreateReservation : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_reservation)
         val db = Firebase.firestore
+        auth = Firebase.auth
 
         val emailText = findViewById<EditText>(R.id.createEmail)
         val nameText = findViewById<EditText>(R.id.createName)
