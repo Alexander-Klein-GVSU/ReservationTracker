@@ -70,7 +70,7 @@ class Signup : AppCompatActivity() {
 
                                 // Add a new document with a generated ID
                                 auth.currentUser?.let { it1 ->
-                                    db.collection("Customer").document(it1.uid)
+                                    db.collection("Customer").document(email)
                                         .set(user)
                                 }
                             }

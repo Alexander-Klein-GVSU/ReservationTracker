@@ -4,14 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class displayReservations : AppCompatActivity() {
+class DisplayReservations : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
@@ -36,7 +35,12 @@ class displayReservations : AppCompatActivity() {
             startActivity(i)
         }
 
-        val docRef = auth.currentUser?.let { db.collection("Customer").document(it.uid).collection("Reservation") }
+        val docRef = auth.currentUser?.let { auth.currentUser!!.email?.let { it1 ->
+            db.collection("Customer").document(
+                it1
+            ).collection("Reservation")
+        } }
+
         docRef?.get()?.addOnSuccessListener {
             val reservations = ArrayList<Reservation>()
             for (item in it.documents) {
