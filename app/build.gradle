@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.reservationtracker"
-        minSdk 19
+        minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -50,5 +50,5 @@ dependencies {
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
-    implementation 'com.firebaseui:firebase-ui-firestore:4.3.1'
+    //implementation 'com.firebaseui:firebase-ui-firestore:4.3.1'
 }
