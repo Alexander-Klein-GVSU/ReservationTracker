@@ -38,26 +38,20 @@ class CreateReservation : AppCompatActivity() {
             val timeVal = timeEstText.text.toString()
             val sizeVal = sizeText.text.toString()
 
-            if (email == "" || name == "" || timeVal == "" || sizeVal == "") {
-                if (auth.fetchSignInMethodsForEmail(email).isComplete) {
-                    // Create a new reservation entry
-                    val reservation = Reservation(email, name, timeVal, sizeVal)
+            if (email != "" || name != "" || timeVal != "" || sizeVal != "") {
+                // Create a new reservation entry
+                val reservation = Reservation(email, name, timeVal, sizeVal)
 
-                    // Add a new document with a generated ID
-                    auth.currentUser?.let { it1 ->
-                        db.collection("Restaurant").document(it1.uid)
-                            .collection("Reservations").document(email).set(reservation)
-                    }
-
-                    db.collection("Customer").document(email)
-                        .collection("Reservations").add(reservation)
-
-
-                    return@setOnClickListener
+                // Add a new document with a generated ID
+                auth.currentUser?.let { it1 ->
+                    db.collection("Restaurant").document(it1.uid)
+                        .collection("Reservations").document(email).set(reservation)
                 }
-            }
 
-            this.finish()
+                db.collection("Customer").document(email)
+                    .collection("Reservations").add(reservation)
+                this.finish()
+                }
         }
 
         backBtn.setOnClickListener {

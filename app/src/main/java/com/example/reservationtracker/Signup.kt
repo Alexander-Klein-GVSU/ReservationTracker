@@ -50,7 +50,6 @@ class Signup : AppCompatActivity() {
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success")
-                            val currentUser = auth.currentUser
                             if (isRestaurant) {
                                 //Add data point with restaurant and email
                                 // Create a new user
