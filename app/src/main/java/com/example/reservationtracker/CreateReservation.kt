@@ -16,7 +16,8 @@ class CreateReservation : AppCompatActivity() {
         val email: String? = null,
         val name: String? = null,
         val timeVal: String? = null,
-        val sizeVal: String? = null
+        val sizeVal: String? = null,
+        val resEmail: String? = null
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +38,11 @@ class CreateReservation : AppCompatActivity() {
             val name = nameText.text.toString()
             val timeVal = timeEstText.text.toString()
             val sizeVal = sizeText.text.toString()
+            val resEmail = auth.currentUser?.email
 
-            if (email != "" || name != "" || timeVal != "" || sizeVal != "") {
+            if (email != "" && name != "" && timeVal != "" && sizeVal != "" && resEmail != "") {
                 // Create a new reservation entry
-                val reservation = Reservation(email, name, timeVal, sizeVal)
+                val reservation = Reservation(email, name, timeVal, sizeVal, resEmail)
 
                 // Add a new document with a generated ID
                 auth.currentUser?.let { it1 ->
