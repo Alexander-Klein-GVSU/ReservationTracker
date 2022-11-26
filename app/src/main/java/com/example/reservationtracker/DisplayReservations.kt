@@ -1,10 +1,11 @@
 package com.example.reservationtracker
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -15,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.awaitAll
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -41,6 +41,12 @@ class DisplayReservations : AppCompatActivity() {
 
         val reserveBtn = findViewById<FloatingActionButton>(R.id.restaurantAddRes)
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channel = NotificationChannel("Ready", "Ready", NotificationManager.IMPORTANCE_DEFAULT)
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
+
         fun getReservations(usrRcyclr: RecyclerView) {
             reservationList = mutableListOf()
             val docRef = auth.currentUser?.let { auth.currentUser!!.email?.let { it1 ->
@@ -51,10 +57,10 @@ class DisplayReservations : AppCompatActivity() {
 
             docRef?.get()?.addOnSuccessListener {
                 val current = LocalDateTime.now()
-                val formatted = current.format(formatter)
+                val currentTime = current.format(formatter)
                 for (item in it.documents) {
                     val reservation = UserData(item.data!!["name"] as String, item.data!!["sizeVal"] as String, item.data!!["timeVal"] as String)
-                    if(formatted >= reservation.time){
+                    if(currentTime >= reservation.time){
                         auth.currentUser?.let { auth.currentUser!!.email?.let { it1 ->
                             db.collection("Restaurant").document(
                                 it1
