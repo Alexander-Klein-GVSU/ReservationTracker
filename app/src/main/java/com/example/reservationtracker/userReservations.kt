@@ -41,30 +41,14 @@ class userReservations : AppCompatActivity() {
 
         auth = Firebase.auth
         var currentTime = Calendar.getInstance().time;
-        val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        val formatted = current.format(formatter)
-        Log.d(TAG, formatted.toString())
-        var isTime = false
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val channel = NotificationChannel("Ready", "Ready", NotificationManager.IMPORTANCE_DEFAULT)
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(channel)
         }
-        if(formatted >= "10:05"){
-            isTime = true
-            val builder = NotificationCompat.Builder(this, "Ready")
-            builder.setContentTitle("Ready")
-            builder.setContentText("Reservation Ready")
-            builder.setSmallIcon(R.drawable.ic_launcher_background)
-            builder.setAutoCancel(true)
 
-            var managerCompact = NotificationManagerCompat.from(this)
-            managerCompact.notify(1, builder.build())
-
-        }
-        Log.d(TAG, isTime.toString())
         fun getReservations(usrRcyclr: RecyclerView) {
             reservationList = mutableListOf()
             val docRef = auth.currentUser?.let { auth.currentUser!!.email?.let { it1 ->
@@ -74,27 +58,39 @@ class userReservations : AppCompatActivity() {
             } }
 
             docRef?.get()?.addOnSuccessListener {
+                val current = LocalDateTime.now()
+                val formatted = current.format(formatter)
                 for (item in it.documents) {
+                    var isTime = false
                     val reservation = UserData(item.data!!["name"] as String, item.data!!["sizeVal"] as String, item.data!!["timeVal"] as String)
-                    reservationList.add(reservation)
+                    Log.d(TAG, reservation.time)
+                    if(formatted >= reservation.time){
+                        auth.currentUser?.let { auth.currentUser!!.email?.let { it1 ->
+                            db.collection("Customer").document(
+                                it1
+                            ).collection("Reservations").document(item.id)
+                                .delete()
+                        }}
+                        val builder = NotificationCompat.Builder(this, "Ready")
+                        builder.setContentTitle("Ready")
+                        builder.setContentText("Reservation Ready")
+                        builder.setSmallIcon(R.drawable.ic_launcher_background)
+                        builder.setAutoCancel(true)
+
+                        var managerCompact = NotificationManagerCompat.from(this)
+                        managerCompact.notify(1, builder.build())
+
+                    }
+                    else{
+                        reservationList.add(reservation)
+                    }
                }
                 layoutManager = LinearLayoutManager(this)
                 usrRcyclr.layoutManager = layoutManager
 
                 adapter = UserAdapter(reservationList)
                 usrRcyclr.adapter = adapter
-                if(formatted >= "10:05"){
-                    isTime = true
-                    val builder = NotificationCompat.Builder(this, "Ready")
-                    builder.setContentTitle("Ready")
-                    builder.setContentText("Reservation Ready")
-                    builder.setSmallIcon(R.drawable.ic_launcher_background)
-                    builder.setAutoCancel(true)
 
-                    var managerCompact = NotificationManagerCompat.from(this)
-                    managerCompact.notify(1, builder.build())
-
-                }
             }
         }
         val refreshBtn = findViewById<FloatingActionButton>(R.id.userRefresh)

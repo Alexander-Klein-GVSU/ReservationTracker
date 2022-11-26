@@ -1,13 +1,16 @@
 package com.example.reservationtracker
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.ktx.firestore
+import java.time.format.DateTimeFormatter
 
 class CreateReservation : AppCompatActivity() {
 
@@ -20,6 +23,7 @@ class CreateReservation : AppCompatActivity() {
         val resEmail: String? = null
     )
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_reservation)
@@ -33,12 +37,17 @@ class CreateReservation : AppCompatActivity() {
         val createBtn = findViewById<Button>(R.id.createCreate)
         val backBtn = findViewById<Button>(R.id.createBack)
 
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+
+
         createBtn.setOnClickListener {
             val email = emailText.text.toString()
             val name = nameText.text.toString()
-            val timeVal = timeEstText.text.toString()
+            var timeVal = timeEstText.text.toString()
             val sizeVal = sizeText.text.toString()
             val resEmail = auth.currentUser?.email
+
+            timeVal = timeVal.format(formatter)
 
             if (email != "" && name != "" && timeVal != "" && sizeVal != "" && resEmail != "") {
                 // Create a new reservation entry
