@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                             Log.d(TAG, item)
                             if (item == email) {
                                 isRestaurant = true
+                                Log.d(TAG, "is restaurant")
                             }
                         }
 

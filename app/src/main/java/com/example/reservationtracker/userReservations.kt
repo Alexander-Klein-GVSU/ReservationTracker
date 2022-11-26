@@ -25,7 +25,7 @@ class userReservations : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        fun getReservations() {
+        fun getReservations(usrRcyclr: RecyclerView) {
             reservationList = mutableListOf()
             val docRef = auth.currentUser?.let { auth.currentUser!!.email?.let { it1 ->
                 db.collection("Customer").document(
@@ -37,30 +37,23 @@ class userReservations : AppCompatActivity() {
                 for (item in it.documents) {
                     val reservation = UserData(item.data!!["name"] as String, item.data!!["sizeVal"] as String, item.data!!["timeVal"] as String)
                     reservationList.add(reservation)
-                }
+               }
+                layoutManager = LinearLayoutManager(this)
+                usrRcyclr.layoutManager = layoutManager
+
+                adapter = UserAdapter(reservationList)
+                usrRcyclr.adapter = adapter
             }
         }
-
-
-        getReservations()
-
         val refreshBtn = findViewById<FloatingActionButton>(R.id.userRefresh)
         val usrRcyclr = findViewById<RecyclerView>(R.id.userRecycler)
 
-        layoutManager = LinearLayoutManager(this)
-        usrRcyclr.layoutManager = layoutManager
+        getReservations(usrRcyclr)
 
-        adapter = UserAdapter(reservationList)
-        usrRcyclr.adapter = adapter
+
 
         refreshBtn.setOnClickListener {
-            getReservations()
-
-            layoutManager = LinearLayoutManager(this)
-            usrRcyclr.layoutManager = layoutManager
-
-            adapter = UserAdapter(reservationList)
-            usrRcyclr.adapter = adapter
+            getReservations(usrRcyclr)
         }
     }
 }

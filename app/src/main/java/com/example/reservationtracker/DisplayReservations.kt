@@ -3,6 +3,7 @@ package com.example.reservationtracker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -10,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.awaitAll
 
 class DisplayReservations : AppCompatActivity() {
 
@@ -19,12 +21,6 @@ class DisplayReservations : AppCompatActivity() {
 
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerView.Adapter<RestaurantAdapter.ViewHolder>? = null
-    data class Reservation(
-        var email: String? = null,
-        var name: String? = null,
-        var timeVal: String? = null,
-        var sizeVal: String? = null
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +29,8 @@ class DisplayReservations : AppCompatActivity() {
         auth = Firebase.auth
 
         val reserveBtn = findViewById<FloatingActionButton>(R.id.restaurantAddRes)
-        val resRcyclr = findViewById<RecyclerView>(R.id.restaurantRecycler)
 
-        reserveBtn.setOnClickListener {
-            val i = Intent(this, CreateReservation::class.java)
-            startActivity(i)
-        }
-
-        fun getReservations() {
+        fun getReservations(usrRcyclr: RecyclerView) {
             reservationList = mutableListOf()
             val docRef = auth.currentUser?.let { auth.currentUser!!.email?.let { it1 ->
                 db.collection("Restaurant").document(
@@ -53,18 +43,25 @@ class DisplayReservations : AppCompatActivity() {
                     val reservation = UserData(item.data!!["name"] as String, item.data!!["sizeVal"] as String, item.data!!["timeVal"] as String)
                     reservationList.add(reservation)
                 }
+                layoutManager = LinearLayoutManager(this)
+                usrRcyclr.layoutManager = layoutManager
+
+                adapter = RestaurantAdapter(reservationList)
+                usrRcyclr.adapter = adapter
             }
         }
-
-
-        getReservations()
-
         val usrRcyclr = findViewById<RecyclerView>(R.id.restaurantRecycler)
 
-        layoutManager = LinearLayoutManager(this)
-        usrRcyclr.layoutManager = layoutManager
+        getReservations(usrRcyclr)
 
-        adapter = RestaurantAdapter(reservationList)
-        usrRcyclr.adapter = adapter
+        reserveBtn.setOnClickListener {
+            val i = Intent(this, CreateReservation::class.java)
+            startActivity(i)
+        }
+
+        val refreshBtn = findViewById<FloatingActionButton>(R.id.displayRefresh)
+        refreshBtn.setOnClickListener {
+            getReservations(usrRcyclr)
+        }
     }
 }
