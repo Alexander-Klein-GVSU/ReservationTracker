@@ -51,4 +51,9 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
     //implementation 'com.firebaseui:firebase-ui-firestore:4.3.1'
+    // for adding recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+
+    // for adding cardview
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

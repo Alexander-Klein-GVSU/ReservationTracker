@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +26,18 @@ class MainActivity : AppCompatActivity() {
         val signupBtn = findViewById<Button>(R.id.loginSignup)
 
         auth = Firebase.auth
+        val db = Firebase.firestore
+
+        val docRef = db.collection("Restaurant")
+
+        val restaurantEmails = ArrayList<String>()
+        docRef.get().addOnSuccessListener {
+            for (item in it.documents) {
+                val emails = item.data!!["email"] as String
+                restaurantEmails.add(emails)
+                Log.d(TAG, emails)
+            }
+        }
 
         loginBtn.setOnClickListener {
             val email = emailText.text.toString()
@@ -42,18 +55,38 @@ class MainActivity : AppCompatActivity() {
                         /*
                         Load table view
                          */
-                        val i = Intent(this, DisplayReservations::class.java)
-                        startActivity(i)
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            baseContext, "Authentication failed.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
+                        var isRestaurant = false
+                        Log.d(TAG, email)
+                        Log.d(TAG, restaurantEmails.toString())
+                        for (item in restaurantEmails) {
+                            Log.d(TAG, item)
+                            if (item == email) {
+                                isRestaurant = true
+                            }
+                        }
+
+                        if (isRestaurant) {
+                            val i = Intent(this, DisplayReservations::class.java)
+                            startActivity(i)
+                        }
+                        else{
+                            Log.d(TAG, "user reservations")
+                            val i = Intent(this, userReservations::class.java)
+                            startActivity(i)
+                        }
+                    }
+                        else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.exception)
+                            Toast.makeText(
+                                baseContext, "Authentication failed.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-        }
+
 
         signupBtn.setOnClickListener {
             val i = Intent(this, Signup::class.java)

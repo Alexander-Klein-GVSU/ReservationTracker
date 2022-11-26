@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class UserAdapter (private val mList: List<UserData>): RecyclerView.Adapter<UserAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.user_template, parent, false)
+class RestaurantAdapter (private val mList: List<UserData>): RecyclerView.Adapter<RestaurantAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantAdapter.ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.restaurant_template, parent, false)
 
         return ViewHolder(view)
     }
@@ -18,8 +17,8 @@ class UserAdapter (private val mList: List<UserData>): RecyclerView.Adapter<User
 
         val item = mList[position]
         holder.itemName.text = item.name
-        holder.itemTable.text = item.tSize
         holder.itemTime.text = item.time
+        holder.itemTable.text = item.tSize
     }
 
     override fun getItemCount(): Int {
@@ -27,8 +26,8 @@ class UserAdapter (private val mList: List<UserData>): RecyclerView.Adapter<User
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var itemName: TextView = itemView.findViewById(R.id.utempName)
-        var itemTable: TextView = itemView.findViewById(R.id.utempTable)
-        var itemTime: TextView = itemView.findViewById(R.id.utempTime)
+        var itemName: TextView = itemView.findViewById(R.id.rtempName)
+        var itemTable: TextView = itemView.findViewById(R.id.rtempTable)
+        var itemTime: TextView = itemView.findViewById(R.id.rtempTime)
     }
 }

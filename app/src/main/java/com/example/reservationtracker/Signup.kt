@@ -58,10 +58,8 @@ class Signup : AppCompatActivity() {
                                 )
 
                                 // Add a new document with a generated ID
-                                auth.currentUser?.let { it1 ->
-                                    db.collection("Restaurant").document(it1.uid )
+                                    db.collection("Restaurant").document(email)
                                         .set(user)
-                                }
                             } else {
                                 val user = hashMapOf(
                                     "email" to email,

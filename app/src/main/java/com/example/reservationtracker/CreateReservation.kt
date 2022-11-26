@@ -46,8 +46,10 @@ class CreateReservation : AppCompatActivity() {
 
                 // Add a new document with a generated ID
                 auth.currentUser?.let { it1 ->
-                    db.collection("Restaurant").document(it1.uid)
-                        .collection("Reservations").document(email).set(reservation)
+                    it1.email?.let { it2 ->
+                        db.collection("Restaurant").document(it2)
+                            .collection("Reservations").document(email).set(reservation)
+                    }
                 }
 
                 db.collection("Customer").document(email)
