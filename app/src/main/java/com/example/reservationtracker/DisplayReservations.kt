@@ -67,7 +67,7 @@ class DisplayReservations : AppCompatActivity() {
                         }}
                         val builder = NotificationCompat.Builder(this, "Ready")
                         builder.setContentTitle("Ready")
-                        builder.setContentText("Reservation Ready")
+                        builder.setContentText("Reservation time for " + reservation.name)
                         builder.setSmallIcon(R.drawable.ic_launcher_background)
                         builder.setAutoCancel(true)
 
