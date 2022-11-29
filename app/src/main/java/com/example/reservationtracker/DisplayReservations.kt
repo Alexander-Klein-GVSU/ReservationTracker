@@ -27,14 +27,12 @@ class DisplayReservations : AppCompatActivity() {
     private var reservationList: MutableList<UserData> = mutableListOf()
 
     private var layoutManager: RecyclerView.LayoutManager? = null
-    private var adapter: RecyclerView.Adapter<RestaurantAdapter.ViewHolder>? = null
+    private var adapter: RecyclerView.Adapter<UserAdapter.ViewHolder>? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_reservations)
-
-        var currentTime = Calendar.getInstance().time;
 
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
         auth = Firebase.auth
@@ -73,7 +71,7 @@ class DisplayReservations : AppCompatActivity() {
                         builder.setSmallIcon(R.drawable.ic_launcher_background)
                         builder.setAutoCancel(true)
 
-                        var managerCompact = NotificationManagerCompat.from(this)
+                        val managerCompact = NotificationManagerCompat.from(this)
                         managerCompact.notify(1, builder.build())
 
                     }
@@ -84,7 +82,7 @@ class DisplayReservations : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this)
                 usrRcyclr.layoutManager = layoutManager
 
-                adapter = RestaurantAdapter(reservationList)
+                adapter = UserAdapter(reservationList)
                 usrRcyclr.adapter = adapter
             }
         }
